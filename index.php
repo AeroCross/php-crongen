@@ -1,3 +1,68 @@
+<?php if (isset($_POST['submit'])) {
+	
+	// export all values to single variables
+	foreach($_POST as $key => $a) {
+		$$key = $a;
+	}
+
+	// if basic info is missing, show error, do not generate
+	if (empty($database) OR empty($username) OR empty($destination)) {		
+			$error		= 'All information fields are required.';
+		} else {
+			$generate	= TRUE;
+		}
+	
+	// if the no pass option wasn't selected, check if there's a password sent
+	if (!isset($nopass)) {
+		if (!isset($password) OR empty($password)) {
+			$error		= 'All information fields are required.';
+			$generate	= FALSE;
+			$password	= NULL;
+		} else {
+			$password	= ' -p' . $password;
+		}
+	}
+
+	// if the no pass option was selected, truncate the password
+	if (isset($nopass)) {
+		$password		= NULL;
+	}
+
+	// set defaults
+	if (empty($hostname)):	$hostname	= 'localhost'; 			endif;
+	if (empty($mysqldump)):	$mysqldump 	= '/usr/bin/mysqldump';	endif;
+
+	// configure keywords
+	if (isset($keywords)) {
+		$hourly		= '@hourly';
+		$daily		= '@daily';
+		$weekly		= '@weekly';
+		$monthly	= '@monthly';
+		$yearly		= '@yearly';
+	} else {
+		/* 
+			crontab syntax:
+				min - hour - dom - month - dow
+			
+			values:
+				min: 0-59
+				hour: 0-23 (midnight = 0)
+				day of month: 1-31
+				month: 1-12
+				day of week: 0-6 (sun = 0)
+		*/
+
+		$hourly		= '0 * * * *';
+		$daily		= '0 0 * * *';
+		$weekly		= '0 0 * * 1'; // starts at monday!
+		$monthly	= '0 0 1 * *';
+		$yearly		= '0 0 1 1 *';
+	}
+
+}
+
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -15,33 +80,59 @@
 		<script src="js/bootstrap.js"></script>
 		<script src="js/functions.js"></script>
 
+		<script type="text/javascript">
+
+			$(document).ready(function(){
+				$('#nopass').on('change', function() {		
+					if ($('#nopass').attr('checked') == 'checked') {
+						$('#password').prop('disabled', true).addClass('disabled');
+					} else {
+						$('#password').prop('disabled', false).removeClass('disabled');
+					}
+				});
+			});
+
+		</script>
+
 	</head>
 
 	<body>
 
 		<div class="container">
 
-			<h2>Crontab</h2>
-
 			<div class="row">
+				
+				<h2>Crontab</h2>
+				
+				<p>Generate hourly, daily, weekly, monthly and yearly MySQL Backup Crontabs.</p>
 
-				<div class="span6">
+					<?php if (isset($error)): ?>
 
-					<p>Introduzca los datos necesarios para generar respaldos programados de bases de datos.</p>
+					<div class="alert">
 
-					<form class="form-horizontal">
+						<a href="#" class="close" data-dismiss="alert">&times;</a>
+						<?php echo $error; ?>
+
+					</div>
+
+					<?php endif; ?>
+
+					<form class="form-horizontal" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+
+					<div class="span6">
 
 						<fieldset>
 							
-							<legend>Información</legend>
+							<legend>Information</legend>
 
 							<div class="control-group">
 
-								<label class="control-label" for="">Base de Datos</label>
+								<label class="control-label" for="database">Database</label>
 
 								<div class="controls">
 
-									<input type="text" class="span2" />
+									<input type="text" class="span2" name="database" id="database" />
+									<p class="help-block">The database to backup</span>
 
 								</div>
 
@@ -49,11 +140,12 @@
 
 							<div class="control-group">
 
-								<label class="control-label" for="">Usuario</label>
+								<label class="control-label" for="username">Username</label>
 
 								<div class="controls">
 
-									<input type="text" class="span2" />
+									<input type="text" class="span2" name="username" id="username" />
+									<p class="help-block">User with access to the database</span>
 
 								</div>
 
@@ -61,12 +153,12 @@
 
 							<div class="control-group">
 
-								<label class="control-label" for="">Contraseña</label>
+								<label class="control-label" for="password">Password</label>
 
 								<div class="controls">
 
-									<input type="text" class="span2" />
-									<p class="help-block">La contraseña se mostrará en <strong>texto plano</strong></p>
+									<input type="text" class="span2" name="password" id="password" />
+									<p class="help-block">Password will be shown in <strong>plaintext</strong></p>
 
 								</div>
 
@@ -74,12 +166,29 @@
 
 							<div class="control-group">
 
-								<label class="control-label" for="">Carpeta destino</label>
+								<label class="control-label" for="nopass">No password</label>
 
 								<div class="controls">
 
-									<input type="text" class="span2" />
-									<p class="help-block">Ruta completa — incluya "/"</p>
+									<label class="checkbox">
+										
+										<input type="checkbox" name="nopass" id="nopass" value="true"/>
+										Check if you connect to your database without password
+									
+									</label>
+
+								</div>
+
+							</div>
+
+							<div class="control-group">
+
+								<label class="control-label" for="destination">Destination folder</label>
+
+								<div class="controls">
+
+									<input type="text" class="span2" name="destination" id="destination" />
+									<p class="help-block">UNIX paths only - include root slash</p>
 
 								</div>
 
@@ -87,18 +196,22 @@
 
 						</fieldset>
 
+					</div>
+
+					<div class="span6">
+
 						<fieldset>
 
-							<legend>Opciones avanzadas</legend>
+							<legend>Options</legend>
 
 							<div class="control-group">
 
-								<label class="control-label" for="">Host</label>
+								<label class="control-label" for="hostname">Hostname</label>
 
 								<div class="controls">
 
-									<input type="text" class="span2" />
-									<p class="help-block">Se utilizará <em>localhost</em> por defecto</p>
+									<input type="text" class="span2" name="hostname" id="hostname" />
+									<p class="help-block">If empty, <em>localhost</em> will be used</p>
 
 								</div>
 
@@ -106,12 +219,12 @@
 
 							<div class="control-group">
 
-								<label class="control-label" for="">Ruta a <em>mysqldump</em></label>
+								<label class="control-label" for="mysqldump">Path to <em>mysqldump</em></label>
 
 								<div class="controls">
 
-									<input type="text" class="span2" />
-									<p class="help-block">Se utilizará <em>/usr/bin/mysqldump</em> por defecto</p>
+									<input type="text" class="span2" name="mysqldump" id="mysqldump" />
+									<p class="help-block">If empty, <em>/usr/bin/mysqldump</em> will be used</p>
 
 								</div>
 
@@ -119,14 +232,14 @@
 
 							<div class="control-group">
 
-								<label class="control-label" for="">Utilizar <em>keywords</em></label>
+								<label class="control-label" for="keywords">Use <em>keywords</em></label>
 
 								<div class="controls">
 									
 									<label class="checkbox">
 										
-										<input type="checkbox" />
-										Se generarán las fechas y horas con formato <strong>@date</strong>
+										<input type="checkbox" name="keywords" id="keywords" value="true"/>
+										Dates and times will be generated using <strong>@keyword</strong> format
 									
 									</label>
 
@@ -138,17 +251,33 @@
 
 						<div class="simple form-actions">
 
-							<input type="submit" class="btn btn-primary" value="Generar" />
+							<input type="submit" class="btn btn-primary" value="Generate" name="submit" />
 
 						</div>
+
+					</div>
 						
 					</form>
 
 				</div>
 
-			</div>
+				<div class="row">
 
-		</div>
+					<?php if (isset($generate) AND $generate === TRUE): ?>
+						
+<pre>
+<?php echo $hourly	. ' ' . $mysqldump . ' -u ' . $username . $password . ' -h ' . $hostname . ' ' . $database . ' > ' . rtrim($destination, '/') . '/hourly.sql'		. "\n"; ?>
+<?php echo $daily	. ' ' . $mysqldump . ' -u ' . $username . $password . ' -h ' . $hostname . ' ' . $database . ' > ' . rtrim($destination, '/') . '/daily.sql'		. "\n"; ?>
+<?php echo $weekly	. ' ' . $mysqldump . ' -u ' . $username . $password . ' -h ' . $hostname . ' ' . $database . ' > ' . rtrim($destination, '/') . '/weekly.sql'		. "\n"; ?>
+<?php echo $monthly	. ' ' . $mysqldump . ' -u ' . $username . $password . ' -h ' . $hostname . ' ' . $database . ' > ' . rtrim($destination, '/') . '/monthly.sql'	. "\n"; ?>
+<?php echo $yearly	. ' ' . $mysqldump . ' -u ' . $username . $password . ' -h ' . $hostname . ' ' . $database . ' > ' . rtrim($destination, '/') . '/yearly.sql' 	. "\n"; ?>
+</pre>
+
+					<?php endif; ?>
+
+				</div>
+
+			</div>
 
 	</body>
 
