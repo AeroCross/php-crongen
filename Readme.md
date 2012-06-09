@@ -14,8 +14,8 @@ And some other handy options.
 
 ### Use
 
-Simply unzip to any folder, navigate to it in your browser, and fill the basic required information.
+Simply unzip to any folder, navigate to it in your browser, and fill the basic required information. The result will show up underneath the options — you'll need to copy the result, edit your crontab (`crontab -e`), paste, and that's it!
 
-Suggestions? Improvements? Send a message, or [fork it][Fork]!
+Suggestions? Improvements? [Fork it][Fork]!
 
 [Fork]: https://github.com/AeroCross/php-crongen/fork
