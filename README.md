@@ -1,5 +1,3 @@
-## Crontab generator for MySQL dumps
-
 This script generates dumps for hourly, daily, weelky, monthly, and yearly backups of MySQL databases, enabling you to choose:
 
 - What database to backups
@@ -10,9 +8,9 @@ And some other handy options.
 
 ### Screenshot
 
-![Screenshot of the Script](http://i.imgur.com/RBobo.png "Screenshot of the Script running")
+![Screenshot of the Script](http://i.imgur.com/TFEDE.png "Screenshot of the Script running")
 
-### Use
+### Usage
 
 Simply unzip to any folder, navigate to it in your browser, and fill the basic required information. The result will show up underneath the options — you'll need to copy the result, edit your crontab (`crontab -e`), paste, and that's it!
 
