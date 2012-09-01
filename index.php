@@ -62,7 +62,6 @@
 }
 
 ?>
-
 <!DOCTYPE html>
 <html>
 
@@ -70,12 +69,14 @@
 
 		<meta charset="utf-8" />
 
-		<title>Crontab Generator for Backups</title>
+		<title>Crontab Generator</title>
 
+		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Cutive' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="css/bootstrap.css" />
 		<link rel="stylesheet" href="css/bootstrap-responsive.css" />
-		<link rel="stylesheet" href="css/styles.css" />
-
+		<link rel='stylesheet' href='css/styles.css' type='text/css'>
+		
 		<script src="js/jquery.js"></script>
 		<script src="js/bootstrap.js"></script>
 		<script src="js/functions.js"></script>
