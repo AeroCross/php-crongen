@@ -101,22 +101,26 @@
 
 		<div class="container">
 
+			<div class="page-header">
+
+				<h3>Crontab Generator</h3>
+
+			</div>
+
+			<!-- errors -->
+			<?php if (isset($error)): ?>
+
+			<div class="alert">
+
+				<a href="#" class="close" data-dismiss="alert">&times;</a>
+				<?php echo $error; ?>
+
+			</div>
+
+			<?php endif; ?>
+			<!-- end errors -->
+
 			<div class="row">
-				
-				<h2>Crontab</h2>
-				
-				<p>Generate hourly, daily, weekly, monthly and yearly MySQL Backup Crontabs.</p>
-
-					<?php if (isset($error)): ?>
-
-					<div class="alert">
-
-						<a href="#" class="close" data-dismiss="alert">&times;</a>
-						<?php echo $error; ?>
-
-					</div>
-
-					<?php endif; ?>
 
 					<form class="form-horizontal" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 
@@ -132,8 +136,8 @@
 
 								<div class="controls">
 
-									<input type="text" class="span2" name="database" id="database" />
-									<p class="help-block">The database to backup</span>
+									<input type="text" name="database" id="database" />
+									<p class="help-block">The database to backup</p>
 
 								</div>
 
@@ -145,8 +149,8 @@
 
 								<div class="controls">
 
-									<input type="text" class="span2" name="username" id="username" />
-									<p class="help-block">User with access to the database</span>
+									<input type="text" name="username" id="username" />
+									<p class="help-block">User with access to the database</p>
 
 								</div>
 
@@ -158,7 +162,7 @@
 
 								<div class="controls">
 
-									<input type="text" class="span2" name="password" id="password" />
+									<input type="text" name="password" id="password" />
 									<p class="help-block">Password will be shown in <strong>plaintext</strong></p>
 
 								</div>
@@ -174,7 +178,7 @@
 									<label class="checkbox">
 										
 										<input type="checkbox" name="nopass" id="nopass" value="true"/>
-										Check if you connect to your database without password
+										Do you connect to your DB with no password?
 									
 									</label>
 
@@ -188,7 +192,7 @@
 
 								<div class="controls">
 
-									<input type="text" class="span2" name="destination" id="destination" />
+									<input type="text" name="destination" id="destination" />
 									<p class="help-block">UNIX paths only - include root slash</p>
 
 								</div>
@@ -211,7 +215,7 @@
 
 								<div class="controls">
 
-									<input type="text" class="span2" name="hostname" id="hostname" />
+									<input type="text" name="hostname" id="hostname" />
 									<p class="help-block">If empty, <em>localhost</em> will be used</p>
 
 								</div>
@@ -224,7 +228,7 @@
 
 								<div class="controls">
 
-									<input type="text" class="span2" name="mysqldump" id="mysqldump" />
+									<input type="text" name="mysqldump" id="mysqldump" />
 									<p class="help-block">If empty, <em>/usr/bin/mysqldump</em> will be used</p>
 
 								</div>
@@ -252,7 +256,7 @@
 
 						<div class="simple form-actions">
 
-							<input type="submit" class="btn btn-primary" value="Generate" name="submit" />
+							<input type="submit" class="btn" value="Generate" name="submit" />
 
 						</div>
 
