@@ -269,14 +269,25 @@
 				<div class="row">
 
 					<?php if (isset($generate) AND $generate === TRUE): ?>
-						
-<pre>
+					
+						<div class="span12">
+
+							<div class="page-header">
+
+								<h4>Result <small id="select">(click to select result)</small></h4>
+
+							</div>
+
+
+<pre id="result">
 <?php echo $hourly	. ' ' . $mysqldump . ' -u ' . $username . $password . ' -h ' . $hostname . ' ' . $database . ' > ' . rtrim($destination, '/') . '/hourly.sql'		. "\n"; ?>
 <?php echo $daily	. ' ' . $mysqldump . ' -u ' . $username . $password . ' -h ' . $hostname . ' ' . $database . ' > ' . rtrim($destination, '/') . '/daily.sql'		. "\n"; ?>
 <?php echo $weekly	. ' ' . $mysqldump . ' -u ' . $username . $password . ' -h ' . $hostname . ' ' . $database . ' > ' . rtrim($destination, '/') . '/weekly.sql'		. "\n"; ?>
 <?php echo $monthly	. ' ' . $mysqldump . ' -u ' . $username . $password . ' -h ' . $hostname . ' ' . $database . ' > ' . rtrim($destination, '/') . '/monthly.sql'	. "\n"; ?>
 <?php echo $yearly	. ' ' . $mysqldump . ' -u ' . $username . $password . ' -h ' . $hostname . ' ' . $database . ' > ' . rtrim($destination, '/') . '/yearly.sql' 	. "\n"; ?>
 </pre>
+
+						</div>
 
 					<?php endif; ?>
 
