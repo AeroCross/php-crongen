@@ -103,7 +103,7 @@
 
 			<div class="page-header">
 
-				<h3>Crontab Generator</h3>
+				<h2>Crontab Generator</h2>
 
 			</div>
 
