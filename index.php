@@ -72,7 +72,7 @@
 		<title>Crontab Generator</title>
 
 		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
-		<link href='http://fonts.googleapis.com/css?family=Cutive' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Rokkitt' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="css/bootstrap.css" />
 		<link rel="stylesheet" href="css/bootstrap-responsive.css" />
 		<link rel='stylesheet' href='css/styles.css' type='text/css'>
@@ -128,8 +128,6 @@
 
 						<fieldset>
 							
-							<legend>Information</legend>
-
 							<div class="control-group">
 
 								<label class="control-label" for="database">Database</label>
@@ -206,8 +204,6 @@
 					<div class="span6">
 
 						<fieldset>
-
-							<legend>Options</legend>
 
 							<div class="control-group">
 

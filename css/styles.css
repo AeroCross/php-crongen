@@ -1,7 +1,13 @@
+body {border-top: 8px solid #2BA6CB;}
 em {font-family: Georgia, Serif;}
-
-.simple.form-actions {background: none; border: none;}
 
 p, ul, ol, li, textarea, input, span, div, legend, form, label {
 	font-family: 'Source Sans Pro', 'Segoe UI', Calibri, sans-serif;
 }
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Rokkitt', Calibri, Serif;
+}
+
+.alert {margin-bottom: 30px;}
+.simple.form-actions {background: none; border: none;}
